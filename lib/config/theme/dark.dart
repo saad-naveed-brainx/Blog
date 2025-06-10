@@ -11,4 +11,5 @@ class DarkTheme {
   static const Color infoColor = Color(0xFF2196F3);
   static const Color signUpButtonColor = Color(0xFF6F00FE);
   static const Color signUpButtonColor2 = Color(0xFF292E3A);
+  static const Color iconColor = Color.fromARGB(255, 87, 76, 175);
 }

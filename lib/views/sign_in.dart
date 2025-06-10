@@ -6,24 +6,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:blog/utility/validators.dart';
 import 'package:blog/widgets/reusableFormField.dart';
 import 'package:blog/core/constants/app_assets.dart';
-import 'package:blog/viewmodel/sign_up_viewmodel.dart';
-import 'package:blog/views/sign_in.dart';
+import 'package:blog/viewmodel/sign_in_viewmodel.dart';
+import 'package:blog/views/sign_up.dart';
 import 'package:blog/config/app_router.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
   @override
-  _SignUpScreenState createState() => _SignUpScreenState();
+  _SignInScreenState createState() => _SignInScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignInScreenState extends State<SignInScreen> {
   final formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
   bool isPasswordVisible = false;
-  bool isConfirmPasswordVisible = false;
   bool isLoading = false;
 
   @override
@@ -36,7 +33,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -47,15 +43,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         isLoading = true;
       });
       try {
-        final user = await SignUpViewModel().createUser(
-          usernameController.text,
+        final user = await SignInViewModel().signIn(
           emailController.text,
           passwordController.text,
-          context,
         );
         AppRouter.NavigatorToHomeScreen(context, user);
       } catch (e) {
-        debugPrint('Error during sign up: $e');
+        debugPrint('Error during sign in: $e');
       } finally {
         if (mounted) {
           setState(() {
@@ -114,7 +108,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              ViewConstants.signUpWelcome,
+                              ViewConstants.signInWelcome,
                               style: TextStyle(
                                 fontSize: AppConstants.font24Px,
                                 color: DarkTheme.textColor,
@@ -123,7 +117,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             SizedBox(height: AppConstants.gap8Px),
                             Text(
-                              ViewConstants.signUpMesage,
+                              ViewConstants.signInMessage,
                               style: TextStyle(
                                 fontSize: AppConstants.font16Px,
                                 color: DarkTheme.textColor,
@@ -131,20 +125,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: AppConstants.gap12Px),
-                        CustomTextFormField(
-                          controller: usernameController,
-                          hintText: ViewConstants.signUpUsername,
-                          validator: Validators.validateUsername,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: AppConstants.gap14Px * 2,
-                            vertical: AppConstants.gap14Px * 2,
-                          ),
-                        ),
-                        SizedBox(height: AppConstants.gap12Px),
+                        SizedBox(height: AppConstants.gap16Px * 2),
                         CustomTextFormField(
                           controller: emailController,
-                          hintText: ViewConstants.signUpEmail,
+                          hintText: ViewConstants.signInEmail,
                           validator: Validators.validateEmail,
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: AppConstants.gap14Px * 2,
@@ -154,7 +138,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         SizedBox(height: AppConstants.gap12Px),
                         CustomTextFormField(
                           controller: passwordController,
-                          hintText: ViewConstants.signUpPassword,
+                          hintText: ViewConstants.signInPassword,
                           validator: Validators.validatePassword,
                           obscureText: !isPasswordVisible,
                           hasToggleVisibility: true,
@@ -162,29 +146,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onToggleVisibility: () {
                             setState(() {
                               isPasswordVisible = !isPasswordVisible;
-                            });
-                          },
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: AppConstants.gap14Px * 2,
-                            vertical: AppConstants.gap20Px,
-                          ),
-                        ),
-                        SizedBox(height: AppConstants.gap12Px),
-                        CustomTextFormField(
-                          controller: confirmPasswordController,
-                          hintText: ViewConstants.signUpConfirmPassword,
-                          validator:
-                              (value) => Validators.validateConfirmPassword(
-                                value,
-                                passwordController,
-                              ),
-                          obscureText: !isConfirmPasswordVisible,
-                          hasToggleVisibility: true,
-                          isTextVisible: isConfirmPasswordVisible,
-                          onToggleVisibility: () {
-                            setState(() {
-                              isConfirmPasswordVisible =
-                                  !isConfirmPasswordVisible;
                             });
                           },
                           contentPadding: EdgeInsets.symmetric(
@@ -211,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                             child: const Text(
-                              ViewConstants.signUpButton,
+                              ViewConstants.signInButton,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: AppConstants.font16Px,
@@ -224,7 +185,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () {
-                              SignUpViewModel().signUpWithGoogle(context);
+                              SignInViewModel().signInWithGoogle(context);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: DarkTheme.signUpButtonColor2,
@@ -249,7 +210,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 SizedBox(width: AppConstants.gap10Px),
                                 const Text(
-                                  ViewConstants.signupGoogle,
+                                  ViewConstants.signInGoogle,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: AppConstants.font16Px,
@@ -266,12 +227,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => SignInScreen(),
+                                  builder: (context) => SignUpScreen(),
                                 ),
                               );
                             },
                             child: Text(
-                              ViewConstants.signUpAlreadyHaveAccount,
+                              ViewConstants.signInNoAccount,
                               style: TextStyle(
                                 fontSize: AppConstants.font16Px,
                                 color: DarkTheme.textColor,
