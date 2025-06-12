@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:blog/models/user_model.dart';
 import 'package:provider/provider.dart';
 import 'package:blog/providers/users_provider.dart';
+import 'package:blog/widgets/reusable_category_card.dart';
 
 class HomeView extends StatefulWidget {
   final UserModel user;
@@ -15,6 +16,13 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  List<dynamic> categories = [
+    {"category": "Robotics", "image": "assets/categories/robot.webp"},
+    {"category": "Mountains", "image": "assets/categories/mountains.png"},
+    {"category": "AI", "image": "assets/categories/AI.jpg"},
+    {"category": "Programming", "image": "assets/categories/programming.jpg"},
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -24,9 +32,9 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppConstants.font14Px * 2,
-          vertical: AppConstants.font14Px * 1,
+        padding: EdgeInsets.only(
+          top: AppConstants.font14Px * 1,
+          bottom: AppConstants.font14Px * 1,
         ),
         child: SafeArea(
           bottom: false,
@@ -37,31 +45,36 @@ class _HomeViewState extends State<HomeView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${ViewConstants.homeHi}, ${widget.user.username}!',
-                        style: TextStyle(
-                          fontSize: AppConstants.font14Px * 1.5,
-                          fontWeight: FontWeight.w400,
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: AppConstants.font14Px * 2,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${ViewConstants.homeHi}, ${widget.user.username}!',
+                          style: TextStyle(
+                            fontSize: AppConstants.font14Px * 1.5,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ),
-                      Text(
-                        ViewConstants.homeExploreNow,
-                        style: TextStyle(
-                          fontSize: AppConstants.font14Px * 2,
-                          fontWeight: FontWeight.w600,
+                        Text(
+                          ViewConstants.homeExploreNow,
+                          style: TextStyle(
+                            fontSize: AppConstants.font14Px * 2,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(
                       Icons.notifications,
                       size: AppConstants.font16Px * 2,
-                      color: DarkTheme.iconColor,
+                      color: DarkTheme.backgroundColor,
                     ),
                   ),
                 ],
@@ -71,7 +84,6 @@ class _HomeViewState extends State<HomeView> {
                 height: 120,
                 child: Consumer<UsersProvider>(
                   builder: (context, usersProvider, child) {
-                    // Create a new list with current user first
                     final allUsers = [...usersProvider.users];
                     final currentUserIndex = allUsers.indexWhere(
                       (user) => user.id == widget.user.id,
@@ -81,28 +93,33 @@ class _HomeViewState extends State<HomeView> {
                       allUsers.insert(0, currentUser);
                     }
                     return ListView.builder(
+                      padding: const EdgeInsets.only(
+                        left: AppConstants.font14Px * 2,
+                      ),
                       scrollDirection: Axis.horizontal,
                       itemCount: allUsers.length,
                       itemBuilder: (context, index) {
                         final user = allUsers[index];
                         final isCurrentUser = user.id == widget.user.id;
                         return Padding(
-                          padding: const EdgeInsets.only(right: 16),
+                          padding: const EdgeInsets.only(
+                            right: AppConstants.gap16Px,
+                          ),
                           child: Column(
                             children: [
                               Container(
-                                width: 70,
-                                height: 70,
+                                width: AppConstants.gap24Px * 3,
+                                height: AppConstants.gap24Px * 3,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color:
                                       isCurrentUser
                                           ? DarkTheme.textColor
-                                          : DarkTheme.signUpButtonColor,
+                                          : DarkTheme.backgroundColor,
                                   border: Border.all(
                                     color:
                                         isCurrentUser
-                                            ? DarkTheme.signUpButtonColor
+                                            ? DarkTheme.backgroundColor
                                             : DarkTheme.textColor,
                                     width: 2,
                                   ),
@@ -117,15 +134,17 @@ class _HomeViewState extends State<HomeView> {
                                       fontWeight: FontWeight.bold,
                                       color:
                                           isCurrentUser
-                                              ? DarkTheme.signUpButtonColor
+                                              ? DarkTheme.backgroundColor
                                               : DarkTheme.textColor,
                                     ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: AppConstants.gap8Px),
                               Text(
-                                isCurrentUser ? 'You' : user.username,
+                                isCurrentUser
+                                    ? ViewConstants.homeYou
+                                    : user.username,
                                 style: TextStyle(
                                   fontSize: AppConstants.font14Px,
                                   color: DarkTheme.backgroundColor,
@@ -138,6 +157,27 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         );
                       },
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: AppConstants.font14Px * 2),
+              SizedBox(
+                width: AppConstants.gap24Px * 18,
+                height: AppConstants.gap24Px * 12,
+                child: ListView.builder(
+                  padding: const EdgeInsets.only(
+                    left: AppConstants.font14Px * 2,
+                  ),
+                  itemCount: categories.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: ReusableCategoryCard(
+                        image: categories[index]['image'],
+                        title: categories[index]['category'],
+                      ),
                     );
                   },
                 ),

@@ -35,4 +35,13 @@ class ViewConstants {
   // Home Constants
   static const String homeHi = 'Hi';
   static const String homeExploreNow = 'Explore now...';
+  static const String homeYou = 'You';
+
+  // Article Constants
+  static const String articleTitle = 'Title';
+  static const String articleContent = 'Content';
+  static const String searchArticles = 'Search articles...';
+  static const String noArticlesFound = 'No articles found';
+  static const String noResultsFoundFor = 'No results found for';
+  static const String noTitle = 'No Title';
 }
