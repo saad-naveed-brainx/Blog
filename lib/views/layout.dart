@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:blog/config/app_router.dart';
 import 'package:blog/views/viewall_article.dart';
 import 'package:blog/views/search_article.dart';
+import 'package:blog/views/profile.dart';
 
 class LayoutView extends StatefulWidget {
   final UserModel user;
@@ -26,7 +27,7 @@ class _LayoutViewState extends State<LayoutView> {
       HomeView(user: widget.user),
       ViewAllArticle(),
       const SearchArticle(),
-      const Center(child: Text('Profile')),
+      ProfileView(user: widget.user),
     ];
   }
 

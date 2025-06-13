@@ -4,7 +4,6 @@ import 'package:blog/config/theme/dark.dart';
 import 'package:blog/viewmodel/viewall_article_viewmodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:blog/core/constants/view_constants.dart';
-import 'package:blog/core/constants/app_constants.dart';
 
 class SearchArticle extends StatefulWidget {
   const SearchArticle({super.key});

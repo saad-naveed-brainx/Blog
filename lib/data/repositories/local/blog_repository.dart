@@ -63,4 +63,15 @@ class BlogRespository {
             .snapshots();
     return stream;
   }
+
+  Stream<QuerySnapshot> getUserPersonalArticles(String userId) {
+    final firebasefirestore = FirebaseFirestore.instance;
+    final stream =
+        firebasefirestore
+            .collection('blogs')
+            .where('user_id', isEqualTo: userId)
+            .orderBy('timestamp', descending: true)
+            .snapshots();
+    return stream;
+  }
 }

@@ -44,4 +44,12 @@ class ViewConstants {
   static const String noArticlesFound = 'No articles found';
   static const String noResultsFoundFor = 'No results found for';
   static const String noTitle = 'No Title';
+  static const String aboutMe = 'About me';
+  static const String whatHaveYouDoneForTheNationToday =
+      'what have you done for the nation today';
+  static const String post = 'Post';
+  static const String following = 'Following';
+  static const String followers = 'Followers';
+  static const String myPosts = 'My Posts';
+  static const String noPostsFound = 'No posts found';
 }

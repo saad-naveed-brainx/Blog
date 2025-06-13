@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:blog/data/repositories/local/user_repository.dart';
-import 'package:blog/config/app_router.dart';
 import 'package:blog/models/user_model.dart';
 
 class SignUpViewModel {
