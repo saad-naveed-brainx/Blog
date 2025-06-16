@@ -7,6 +7,8 @@ import 'package:blog/viewmodel/profile_viewmodel.dart';
 import 'package:blog/widgets/reusable_article_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:blog/core/constants/view_constants.dart';
+import 'package:blog/config/app_router.dart';
+import 'package:blog/models/blog_model.dart';
 
 class ProfileView extends StatefulWidget {
   final UserModel user;
@@ -105,9 +107,9 @@ class _ProfileViewState extends State<ProfileView> {
             ),
             SizedBox(height: AppConstants.gap12Px),
             StreamBuilder<QuerySnapshot>(
-              stream: ProfileViewModel(
-                blogRepository: BlogRespository(),
-              ).getUserPersonalArticles(widget.user.id),
+              stream: ProfileViewModel().getUserPersonalArticles(
+                widget.user.id,
+              ),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -122,9 +124,21 @@ class _ProfileViewState extends State<ProfileView> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       final doc = snapshot.data!.docs[index];
-                      return ReusableArticleCard(
-                        title: doc['title'],
-                        content: doc['content'],
+                      return GestureDetector(
+                        onTap: () {
+                          AppRouter.NavigatorToDetailViewArticleScreen(
+                            context,
+                            BlogModel.fromJson(
+                              doc.data() as Map<String, dynamic>,
+                            ),
+                          );
+                        },
+                        child: ReusableArticleCard(
+                          blogModel: BlogModel.fromJson(
+                            doc.data() as Map<String, dynamic>,
+                          ),
+                          profile: true,
+                        ),
                       );
                     },
                   );

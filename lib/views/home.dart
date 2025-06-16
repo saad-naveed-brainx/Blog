@@ -7,6 +7,7 @@ import 'package:blog/models/user_model.dart';
 import 'package:provider/provider.dart';
 import 'package:blog/viewmodel/home_viewmodel.dart';
 import 'package:blog/widgets/reusable_category_card.dart';
+import 'package:blog/models/blog_model.dart';
 
 class HomeView extends StatefulWidget {
   final UserModel user;
@@ -193,23 +194,39 @@ class _HomeViewState extends State<HomeView> {
             StreamBuilder(
               stream: HomeViewModel().getArticles(),
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: DarkTheme.whiteColor,
+                    ),
+                  );
+                }
+                if (snapshot.data!.docs.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      ViewConstants.noRecentPostsFound,
+                      style: TextStyle(
+                        fontSize: AppConstants.font14Px,
+                        color: DarkTheme.greyColor,
+                      ),
+                    ),
+                  );
+                } else if (snapshot.hasData) {
                   return Column(
                     children:
                         snapshot.data!.docs.map((doc) {
                           return Padding(
                             padding: const EdgeInsets.all(AppConstants.gap16Px),
                             child: ReusableArticleCard(
-                              title: doc['title'],
-                              content: doc['content'],
+                              blogModel: BlogModel.fromJson(
+                                doc.data() as Map<String, dynamic>,
+                              ),
                             ),
                           );
                         }).toList(),
                   );
                 }
-                return const Center(
-                  child: CircularProgressIndicator(color: DarkTheme.whiteColor),
-                );
+                return const SizedBox.shrink();
               },
             ),
           ],

@@ -4,6 +4,8 @@ import 'package:blog/config/theme/dark.dart';
 import 'package:blog/viewmodel/viewall_article_viewmodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:blog/core/constants/view_constants.dart';
+import 'package:blog/config/app_router.dart';
+import 'package:blog/models/blog_model.dart';
 
 class SearchArticle extends StatefulWidget {
   const SearchArticle({super.key});
@@ -144,41 +146,53 @@ class _SearchArticleState extends State<SearchArticle> {
                     itemCount: filteredDocs.length,
                     itemBuilder: (context, index) {
                       final doc = filteredDocs[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: AppConstants.gap16Px,
-                        ),
-                        child: Card(
-                          elevation: AppConstants.gap8Px,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              AppConstants.gap12Px,
+                      return GestureDetector(
+                        onTap: () {
+                          AppRouter.NavigatorToDetailViewArticleScreen(
+                            context,
+                            BlogModel.fromJson(
+                              doc.data() as Map<String, dynamic>,
                             ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: AppConstants.gap16Px,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(AppConstants.gap16Px),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  doc['title'] ?? ViewConstants.noTitle,
-                                  style: const TextStyle(
-                                    fontSize: AppConstants.font18Px,
-                                    fontWeight: FontWeight.bold,
-                                    color: DarkTheme.blackColor,
+                          child: Card(
+                            elevation: AppConstants.gap8Px,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                AppConstants.gap12Px,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(
+                                AppConstants.gap16Px,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    doc['title'] ?? ViewConstants.noTitle,
+                                    style: const TextStyle(
+                                      fontSize: AppConstants.font18Px,
+                                      fontWeight: FontWeight.bold,
+                                      color: DarkTheme.blackColor,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: AppConstants.gap8Px),
-                                Text(
-                                  doc['content'].toString().length > 100
-                                      ? '${doc['content'].toString().substring(0, 100)}...'
-                                      : doc['content'].toString(),
-                                  style: const TextStyle(
-                                    fontSize: AppConstants.font14Px,
-                                    color: Colors.black54,
+                                  const SizedBox(height: AppConstants.gap8Px),
+                                  Text(
+                                    doc['content'].toString().length > 100
+                                        ? '${doc['content'].toString().substring(0, 100)}...'
+                                        : doc['content'].toString(),
+                                    style: const TextStyle(
+                                      fontSize: AppConstants.font14Px,
+                                      color: Colors.black54,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),

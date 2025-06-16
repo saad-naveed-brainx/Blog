@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:blog/data/repositories/local/user_repository.dart';
 import 'package:blog/models/user_model.dart';
+import 'package:blog/data/repositories/local/blog_repository.dart';
 
 class SignInViewModel {
-  Future<UserModel> signIn(
-    String email,
-    String password,
-  ) async {
+  final BlogRespository _blogRepository = BlogRespository();
+  Future<UserModel> signIn(String email, String password) async {
     try {
       final user = await UserRepository().signIn(email, password);
       if (user.id.isNotEmpty) {
@@ -22,4 +21,6 @@ class SignInViewModel {
   signInWithGoogle(BuildContext context) async {
     await UserRepository().signInWithGoogle();
   }
+
+  
 }

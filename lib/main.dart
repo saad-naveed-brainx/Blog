@@ -5,7 +5,6 @@ import 'package:blog/firebase_options.dart';
 import 'package:blog/views/sign_in.dart';
 import 'package:blog/viewmodel/home_viewmodel.dart';
 import 'package:blog/viewmodel/profile_viewmodel.dart';
-import 'package:blog/data/repositories/local/blog_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,9 +20,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
-        ChangeNotifierProvider(
-          create: (_) => ProfileViewModel(blogRepository: BlogRespository()),
-        ),
+        ChangeNotifierProvider(create: (_) => ProfileViewModel()),
       ],
       child: MaterialApp(
         title: 'Blog App',

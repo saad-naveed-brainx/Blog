@@ -5,10 +5,14 @@ import 'package:blog/config/theme/dark.dart';
 import 'package:blog/core/constants/view_constants.dart';
 import 'package:intl/intl.dart';
 import 'package:blog/viewmodel/new_article_viewmodel.dart';
+import 'package:blog/models/blog_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:blog/config/app_router.dart';
 
 class NewArticle extends StatefulWidget {
   final UserModel user;
-  const NewArticle({super.key, required this.user});
+  final BlogModel? blogModel;
+  const NewArticle({super.key, required this.user, this.blogModel});
   @override
   State<NewArticle> createState() => _NewArticleState();
 }
@@ -17,8 +21,30 @@ class _NewArticleState extends State<NewArticle> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.blogModel != null) {
+      titleController.text = widget.blogModel!.title;
+      contentController.text = widget.blogModel!.content;
+    }
+  }
+
   void _createArticle() {
     final newArticleViewModel = NewArticleViewModel();
+    if (widget.blogModel != null) {
+      newArticleViewModel.updateArticleViewModel(
+        BlogModel(
+          id: widget.blogModel!.id,
+          title: titleController.text,
+          content: contentController.text,
+          user_id: widget.user.id,
+          timestamp: Timestamp.now(),
+        ),
+      );
+      AppRouter.NavigatorToDetailViewArticleScreen(context, widget.blogModel!);
+      return;
+    }
     newArticleViewModel.createArticle(
       titleController.text,
       contentController.text,

@@ -18,6 +18,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Stream<QuerySnapshot> getArticles() {
+    debugPrint('getArticles');
     return blogRespository.getRecentArticles();
   }
 }

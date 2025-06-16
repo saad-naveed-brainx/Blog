@@ -74,4 +74,27 @@ class BlogRespository {
             .snapshots();
     return stream;
   }
+
+  Future<void> deleteArticle(String articleID) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('blogs')
+          .doc(articleID)
+          .delete();
+    } catch (e) {
+      debugPrint('Error deleting article: ${e.toString()}');
+      throw Exception('Error deleting article');
+    }
+  }
+
+  Future<void> updateArticle(BlogModel updatedArticle) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('blogs')
+          .doc(updatedArticle.id)
+          .update(updatedArticle as Map<String, dynamic>);
+    } catch (e) {
+      throw Exception('error updating the document');
+    }
+  }
 }

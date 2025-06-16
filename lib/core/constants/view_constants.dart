@@ -52,4 +52,10 @@ class ViewConstants {
   static const String followers = 'Followers';
   static const String myPosts = 'My Posts';
   static const String noPostsFound = 'No posts found';
+  static const String noRecentPostsFound = 'No Blog is posted in last 12 hours';
+  static const String deleteArticle = 'Delete Article';
+  static const String areYouSureYouWantToDeleteThisArticle =
+      'Are you sure you want to delete this article?';
+  static const String cancel = 'Cancel';
+  static const String delete = 'Delete';
 }
